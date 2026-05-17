@@ -13,3 +13,7 @@ const pool = new Pool({
 
 export default pool;
 
+//Trying to make a fucking schema table to hold multiple data currently. I think this will take more time than I fucking thought. So just to make my profile green for now, I will commit this
+
+
+
