@@ -1,28 +1,19 @@
 import { Pool } from "pg";
 import bcrypt from "bcrypt";
 
-export const register = (req, res) => {
-  const { first_name, last_name, password, username, email, phone_no } =
-    req.body;
-  const saltRounds = 12;
-  //hashes the fucking password using bcrypt;
-  let hashedPass;
-  bcrypt.hash(password, saltRounds, (err, hashedPass) => {
-    // if (err) throw err;
-    console.log(hashedPass);
-    // res.send(`The fucking hashed passwords are: ${hashedPass}`)
-
-    const otherPass = "Some other fucking plain stuff";
-
-    bcrypt.compare(otherPass, hashedPass, (err, result) => {
-      // if (err) throw err;
-      console.log(result);
-      // res.send(`${result}`);
-      // res.send(`The fucking passwords ${hashedPass} and some bullshit don't match`);
-    });
-  });
+export const register = async (req, res) => {
+  const { first_name, last_name, password, username, email, phone_no } = req.body;
 
   if (!first_name || !last_name || !password || !username || !email) {
     res.send(`Something is missing man`);
   }
+
+  const saltRounds = 12;
+  //hashes the fucking password using bcrypt;
+  const hashed = await bcrypt.hash(password, saltRounds);
+  console.log(hashed);
+  console.log(compare);
+
+
+  
 };
