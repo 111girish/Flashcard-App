@@ -13,7 +13,7 @@ export const register = async (req, res) => {
   //hashes the fucking password using bcrypt;
   const hashed = await bcrypt.hash(password, saltRounds);
 
-  const text = `INSERT INTO users(first_name, last_name, password, username, email, phone_no) VALUES($1, $2, $3, $4, $5, $6)`;
+  const text = `INSERT INTO users(first_name, last_name, password, username, email, phone_no) VALUES($1, $2, $3, $4, $5, $6) RETURNING *`;
   const values = [first_name, last_name, hashed, username, email, phone_no];
 
   const client = await pool.connect();
