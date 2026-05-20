@@ -28,3 +28,7 @@ export const register = async (req, res) => {
     client.release();
   }
 };
+
+export const login =  (req, res) => {
+  
+}
