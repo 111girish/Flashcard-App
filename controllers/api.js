@@ -1,5 +1,7 @@
 import bcrypt from "bcrypt";
 import pool from "../db.js";
+import getEnv from "../config.js";
+import jwt from "jsonwebtoken";
 
 export const register = async (req, res) => {
   const { first_name, last_name, password, username, email, phone_no } =
@@ -31,21 +33,46 @@ export const register = async (req, res) => {
 };
 
 export const login = async (req, res) => {
-  const { first_name, email, username } = req.body;
-  if (!first_name || !username || !email) {
+  const { email, username, password } = req.body;
+  if (!username || !email || !password) {
     res.send(`Something is missing man`);
     return;
   }
-  
+  const accessToken = getEnv("accessToken");
+
   const text = "SELECT * FROM users WHERE username = $1;";
-  const values = username;
+  const values = [username];
 
-  const client = pool.connect();
-  try{
+  const client = await pool.connect();
+  try {
     const result = await client.query(text, values);
-  } 
-  catch(err) {
-    console.error("There seems to be a fucking problem nilla;")
-  }
+    const user = result.rows[0];
 
+    if (!user) return res.status(401).json({message: "I have no idea who the fuck that is..."});
+
+    const dataUser = user.username;
+    const dataPassword = user.password;
+
+    const compare = await bcrypt.compare(password, dataPassword);
+
+    if (!(dataUser === username && compare)) {
+      res.status(401).json({ message: "Yo! Who the fuck is you?" });
+      return;
+    } 
+
+    const payload = {
+      username: username,
+    };
+    const secret = `${accessToken}`;
+    const token = jwt.sign(payload, secret, {
+      expiresIn: "1h",
+    });
+
+    res.status(200).json({message:"Whasssup twinn", token });
+  } catch (err) {
+    console.error(err);
+    res.status(500).json({ message: "Login failed" });
+  } finally {
+    client.release();
+  }
 };
