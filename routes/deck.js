@@ -4,7 +4,7 @@ import authentication from '../middleware/authentication.js';
 
 const router = express.Router();
 
-router.post('/deck',authentication, deckCreate);
+router.post('/deck-create',authentication, deckCreate);
 
 export default router;
 

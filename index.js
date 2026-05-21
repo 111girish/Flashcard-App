@@ -12,7 +12,7 @@ const PORT = getEnv('port');
 app.use(express.json());
 app.use('/api', apiRoutes);
 app.use('/api/auth/', authRoutes);
-app.use('/api/decks', deckRoutes);
+app.use('/api/', deckRoutes);
 
 app.get('/', (req, res) => res.send('HELLO FROM HOMEPAGE!'));
 
