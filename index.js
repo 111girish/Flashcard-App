@@ -4,6 +4,7 @@ import pool from './db.js';
 
 import apiRoutes from './routes/api.js';
 import authRoutes from './routes/auth.js';
+import deckRoutes from './routes/deck.js';
 
 const app = express();
 const PORT = getEnv('port');
@@ -11,6 +12,7 @@ const PORT = getEnv('port');
 app.use(express.json());
 app.use('/api', apiRoutes);
 app.use('/api/auth/', authRoutes);
+app.use('/api/decks', deckRoutes);
 
 app.get('/', (req, res) => res.send('HELLO FROM HOMEPAGE!'));
 

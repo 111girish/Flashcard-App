@@ -63,7 +63,7 @@ export const login = async (req, res) => {
 
     const payload = {
       username: username,
-      user_id: userId
+      userId: userId
     };
     const secret = `${accessToken}`;
     const token = jwt.sign(payload, secret, {
