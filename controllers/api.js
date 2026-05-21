@@ -52,6 +52,7 @@ export const login = async (req, res) => {
 
     const dataUser = user.username;
     const dataPassword = user.password;
+    const userId = user.user_id;
 
     const compare = await bcrypt.compare(password, dataPassword);
 
@@ -62,6 +63,7 @@ export const login = async (req, res) => {
 
     const payload = {
       username: username,
+      user_id: userId
     };
     const secret = `${accessToken}`;
     const token = jwt.sign(payload, secret, {
