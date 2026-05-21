@@ -1,10 +1,10 @@
 import express from 'express';
 import { register } from '../controllers/api.js';
+import authentication from '../middleware/authentication.js';
+import deckRoutes from '../controllers/deck.js'
 
 const router = express.Router();
 
-router.get('/health', (req,res) => {
-  res.send({ status: "OK" });
-})
+router.get('/decks' ,authentication, deckRoutes)
 
 export default router;
