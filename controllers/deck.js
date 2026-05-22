@@ -23,3 +23,25 @@ export const deckCreate = async (req, res) => {
     client.release();
   }
 }
+
+export const deckRecieve = async (req, res) => {
+  const userId = req.user.userId;
+  
+  if (!userId) return res.status(401).json({message: "The user is missing twinn!"});
+
+  const client = await pool.connect();
+  const text ='SELECT * FROM decks WHERE user_id = $1';
+  const value = [userId];
+
+  try{
+    const result = await client.query(text, value);
+    const data = result.rows;
+    res.status(200).json({message: "The deck is recieved!!", decks: data});
+  }catch(error){
+    res.status(500).json({message: "Failed to retrieve decks!"});
+  }finally{
+    client.release();
+  }
+}
+
+

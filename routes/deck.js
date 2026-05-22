@@ -1,10 +1,11 @@
 import express from 'express';
-import { deckCreate } from '../controllers/deck.js';
+import { deckCreate, deckRecieve } from '../controllers/deck.js';
 import authentication from '../middleware/authentication.js';
 
 const router = express.Router();
 
-router.post('/deck-create',authentication, deckCreate);
+router.post('/',authentication, deckCreate);
+router.get('/', authentication, deckRecieve);
 
 export default router;
 
