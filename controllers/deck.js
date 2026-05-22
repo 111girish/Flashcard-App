@@ -44,4 +44,26 @@ export const deckRecieve = async (req, res) => {
   }
 }
 
+export const deleteDeck = async (req, res) => {
+  const userId = req.user.userId;
+  const deckId = req.params.id;
+  if (!userId) return res.status(401).json({message: "The user is missing man!!"});
+  
+  const client = await pool.connect();
+  const text ='DELETE FROM decks WHERE user_id = $1 AND deck_id = $2 RETURNING *;';
+  const value = [userId, deckId];
+
+  try{
+    const result = await client.query(text, value);
+    const data = result.rows;
+    res.status(200).json({message: `The deck with id ${deckId} is deleted`});
+  }catch(error){
+    res.status(500).json({message: "Failed to delete deck"});
+  }finally{
+    client.release();
+  }
+}
+
+
+
 
