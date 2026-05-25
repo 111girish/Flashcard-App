@@ -1,4 +1,5 @@
 import pool from "../db.js";
+import sm2 from "../utils/sm2.js";
 
 export const cardCreate = async (req, res) => {
   const userId = req.user.userId;
@@ -63,4 +64,31 @@ export const cardDelete = async (req, res) => {
   } finally {
     client.release();
   }
+}
+
+export const cardReview = async(req, res) => {
+  const userId = req.user.userId;
+  const cardId = req.params.id;
+
+  const {rating} = req.body;
+
+  if (!req.body) return res.status(401).json({message: "User not found!!"});
+
+  const text = "SELECT * FROM cards WHERE card = $1";
+  const values = [cardId];
+
+  const client = await pool.connect();
+  try{
+    const result = await client.query(text, values);
+    const data = result.rows[0];
+    res.status(200).json({message: "The data is recieved", data});
+  }
+  catch(err){
+    console.log(error);
+    res.status(200).json({message: "There seems to be a error"});
+  }finally{
+    client.release();
+  }
+
+  
 }
