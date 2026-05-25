@@ -47,12 +47,13 @@ export const cardGet = async (req, res) => {
 };
 
 export const cardDelete = async (req, res) => {
-  const userId =  req.user.userId;
+  const userId = req.user.userId;
   const cardId = req.params.id;
 
-  const text = 'DELETE FROM cards WHERE card_id = $1 AND deck_id IN (SELECT deck_id FROM decks WHERE user_id = $2) ';
+  const text =
+    "DELETE FROM cards WHERE card_id = $1 AND deck_id IN (SELECT deck_id FROM decks WHERE user_id = $2) ";
   const values = [cardId, userId];
-  
+
   const client = await pool.connect();
   try {
     const result = await client.query(text, values);
@@ -64,31 +65,53 @@ export const cardDelete = async (req, res) => {
   } finally {
     client.release();
   }
-}
+};
 
-export const cardReview = async(req, res) => {
+export const cardReview = async (req, res) => {
   const userId = req.user.userId;
   const cardId = req.params.id;
 
-  const {rating} = req.body;
+  const { rating } = req.body;
 
-  if (!req.body) return res.status(401).json({message: "User not found!!"});
-
-  const text = "SELECT * FROM cards WHERE card = $1";
-  const values = [cardId];
+  if(!rating || rating < 0 || rating > 5) return res.status(400).json({message: "Rating must be between 0 and 5"})
 
   const client = await pool.connect();
-  try{
-    const result = await client.query(text, values);
-    const data = result.rows[0];
-    res.status(200).json({message: "The data is recieved", data});
-  }
-  catch(err){
-    console.log(error);
-    res.status(200).json({message: "There seems to be a error"});
-  }finally{
+  try {
+    const text1 = "SELECT * FROM cards WHERE card_id = $1";
+    const value1 = [cardId];
+
+
+    const result1 = await client.query(text1, value1);
+    const data1 = result1.rows[0];
+    const { ease_factor, interval, repetitions, next_review_date } = data1;
+
+    const final = sm2(rating, repetitions, ease_factor, interval);
+
+    
+
+    const { repetitions: newRepetitions, easyFactor, interval: newInterval } = final;
+    const newReviewdate = new Date();
+    newReviewdate.setDate(newReviewdate.getDate() + newInterval); 
+
+    
+
+    const text2 =
+      "UPDATE cards SET repetitions = $1, interval = $2, next_review_date = $3, ease_factor = $4 WHERE card_id = $5 RETURNING * ;";
+    const value2 = [
+      newRepetitions,
+      newInterval,
+      newReviewdate,
+      easyFactor,
+      cardId,
+    ];
+
+    const result2 = await client.query(text2, value2);
+    const data2 = result2.rows[0];
+    res.status(200).json({ message: "The table is updated!", data2 });
+  } catch (err) {
+    console.log(err);
+    res.status(404).json({ message: "There is no card of that id" });
+  } finally {
     client.release();
   }
-
-  
-}
+};
