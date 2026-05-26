@@ -25,8 +25,12 @@ export const register = async (req, res) => {
     console.log("Data saved:", result.rows[0]);
     res.status(201).json({ message: "User registered successfully" });
   } catch (err) {
-    console.error("Error executing query.");
+    console.log(err);
+    if (err.code = 23505){
+      res.status(409).json({message: "The username and email already exists!!"});
+    } else{
     res.status(500).json({ message: "User registration failed" });
+    }
   } finally {
     client.release();
   }
