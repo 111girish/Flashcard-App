@@ -1,7 +1,15 @@
-const Login = () => {
+const Login = async () => {
+
 
   return (
-    <h1>Login</h1>
+    <>
+      <form >
+        <input placeholder="username" name='username' />
+        <input placeholder='email' name='email' />
+        <input placeholder='password' name='password' />
+        <input type="submit" />
+      </form>
+    </>
   );
 
 }
