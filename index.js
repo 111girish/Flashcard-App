@@ -1,6 +1,7 @@
 import express from 'express';
 import getEnv from './config.js';
 import pool from './db.js';
+import cors from "cors";
 
 import apiRoutes from './routes/api.js';
 import authRoutes from './routes/auth.js';
@@ -9,6 +10,11 @@ import cardRoutes from './routes/card.js';
 
 const app = express();
 const PORT = getEnv('port');
+
+app.use(cors({
+  origin: 'http://localhost:5173',
+  credentials: true
+}));
 
 app.use(express.json());
 app.use('/api', apiRoutes);
