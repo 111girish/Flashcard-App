@@ -26,12 +26,13 @@ const Login = () => {
 
     try {
       const result = await axios.post("http://localhost:5000/api/auth/login/", loginData)
-      console.log("User is qualified", result.data);
+      console.log("User is qualified");
       localStorage.setItem('token', result.data.token);
       navigate("/dashboard");
     }
     catch(err){
       console.log(err);
+      console.log("The match was not found!!!");
     };
 
   }
@@ -40,9 +41,9 @@ const Login = () => {
   return (
     <>
       <form onSubmit={handleSubmit}>
-        <input placeholder="username" name='username' onChange={handleChange} />
-        <input placeholder='email' name='email' onChange={handleChange}/>
-        <input placeholder='password' name='password' onChange={handleChange} />
+        <input type="text" placeholder="username" name='username' onChange={handleChange} />
+        <input type="email" placeholder='email' name='email' onChange={handleChange}/>
+        <input type="password" placeholder='password' name='password' onChange={handleChange} />
         <input type="submit" />
       </form>
     </>
