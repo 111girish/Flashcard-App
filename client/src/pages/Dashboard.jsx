@@ -1,4 +1,9 @@
+import { useState } from "react";
+
 const Dashboard = () => {
+
+  const {list ,setList} = useState({});
+
 
   return(
     <>
