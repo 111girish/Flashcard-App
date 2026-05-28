@@ -1,13 +1,22 @@
 import { useState } from "react";
+import axios from 'axios';
 
 const Dashboard = () => {
 
-  const {list ,setList} = useState({});
+  const [decks, setDecks] = useState('');
 
+  const token = localStorage.getItem("token");
+  const result = axios.get("http://localhost:5000/api/decks/", {
+    headers: {Authorization: `Bearer ${token}`}
+  });
+  const data = result.data.decks;
 
+  
   return(
     <>
-      <h1>Dashboard</h1>
+      <ul>
+        <li>data</li>
+      </ul>
     </>
   ); 
 
