@@ -58,7 +58,7 @@ const DashBoard = () => {
         <ul>
           {decks.map((deck) => (
             <li key={deck.deck_id} >
-              <Link to={`/decks/${deck.deck_id}`}>{deck.subject}</Link>
+              <Link to={`/deck/${deck.deck_id}`}>{deck.subject}</Link>
               <button
                 onClick={() => {
                   handleDelete(deck.deck_id);
