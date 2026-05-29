@@ -51,6 +51,7 @@ export const login = async (req, res) => {
   try {
     const result = await client.query(text, values);
     const user = result.rows[0];
+    console.log("Found user: ", user);
 
     if (!user) return res.status(401).json({message: "I have no idea who the fuck that is..."});
 
