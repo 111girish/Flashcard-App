@@ -12,8 +12,7 @@ export const deckCreate = async (req, res) => {
   try {
     const result = await client.query(text, values);
     const data = result.rows[0];
-    const userSubject = data.subject;    
-    res.status(200).json({message: "The deck is created", userSubject});
+    res.status(200).json({message: "The deck is created", decks: data});
   } 
   catch(error){
     console.error(error);
