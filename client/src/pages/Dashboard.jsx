@@ -1,7 +1,9 @@
-import { useState, useEffect } from "react";
+import { useState, useEffect,  } from "react";
 import axios from "axios";
+import { Link } from "react-router-dom";
 
 const DashBoard = () => {
+
   const [decks, setDecks] = useState([]);
   const [subject, setSubject] = useState("");
 
@@ -26,18 +28,26 @@ const DashBoard = () => {
 
   const handleSubmit = (e) => {
     e.preventDefault();
-    setSubject('');
     const createDeck = async () => {
       const token = localStorage.getItem("token");
       const result = await axios.post(
         "http://localhost:5000/api/decks",
         { subject },
-        { headers: { Authorization: `Bearer ${token}` } }
+        { headers: { Authorization: `Bearer ${token}` } },
       );
       const data = result.data.decks;
       setDecks([...decks, data]);
+      setSubject("");
     };
     createDeck();
+  };
+
+  const handleDelete = async (deckId) => {
+    const token = localStorage.getItem("token");
+    await axios.delete(`http://localhost:5000/api/decks/${deckId}`, {
+      headers: { Authorization: `Bearer ${token}` },
+    });
+    setDecks(decks.filter((deck) => deck.deck_id !== deckId));
   };
 
   return (
@@ -47,7 +57,16 @@ const DashBoard = () => {
       {decks.length > 0 && (
         <ul>
           {decks.map((deck) => (
-            <li key={deck.deck_id}>{deck.subject}</li>
+            <li key={deck.deck_id} >
+              <Link to={`/decks/${deck.deck_id}`}>{deck.subject}</Link>
+              <button
+                onClick={() => {
+                  handleDelete(deck.deck_id);
+                }}
+              >
+                Delete
+              </button>
+            </li>
           ))}
         </ul>
       )}
@@ -55,7 +74,7 @@ const DashBoard = () => {
         <input
           type="text"
           placeholder="Eg. Human Anatomy"
-          value = {subject}
+          value={subject}
           onChange={handleChange}
         />
         <input type="submit" />

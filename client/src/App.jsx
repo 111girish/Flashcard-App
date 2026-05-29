@@ -3,6 +3,7 @@ import Register from "./pages/Register";
 import Homepage from "./pages/Homepage";
 import { Routes, Route } from "react-router-dom";
 import Dashboard from "./pages/Dashboard";
+import Card from "./pages/Card"
 
 function App() {
   return (
@@ -12,6 +13,7 @@ function App() {
         <Route path="/login" element={<Login />} />
         <Route path="/register" element={<Register />} />
         <Route path="/dashboard" element={<Dashboard />} />
+        <Route path="/deck/:id" element={<Card />} />
       </Routes>
     </>
   );
