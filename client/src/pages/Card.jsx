@@ -6,6 +6,8 @@ const Card = () => {
   const [cards, setCards] = useState([]);
   const { deckId } = useParams();
   const [text, setText] = useState({ front_text: "", back_text: "" });
+  const { front_text, back_text } = text;
+
 
   useEffect(() => {
     const cardGet = async () => {
@@ -35,8 +37,9 @@ const Card = () => {
         { front_text, back_text, deckId },
         { headers: { Authorization: `Bearer ${token}` } },
       );
-      const data = result.data.data;
+      const data = result.data.data[0];
       setCards([...cards, data]);
+      setText({front_text: "", back_text: ""})
     };
     cardPost();
   };
@@ -45,8 +48,8 @@ const Card = () => {
     const token = localStorage.getItem("token");
     await axios.delete(`http://localhost:5000/api/cards/${cardId}`, {
       headers: { Authorization: `Bearer ${token}` }
-    });
-    cards.filter((card) => card.card_id !== cardId);
+    });    
+    setCards(cards.filter((card) => card.card_id !== cardId));
   };
 
   return (
@@ -55,7 +58,7 @@ const Card = () => {
       {!cards.length && <h3>There are no cards here!!</h3>}
       {cards.length > 0 && (
         <ul>
-          {cards.map((card) => {
+          {cards.map((card) => (
             <li key={card.card_id}>
               {card.front_text} === {card.back_text}
               <button
@@ -65,8 +68,8 @@ const Card = () => {
               >
                 Delete
               </button>
-            </li>;
-          })}
+            </li>
+          ))}
         </ul>
       )}
       <form onSubmit={handleSubmit}>
@@ -74,11 +77,13 @@ const Card = () => {
           placeholder="Front text"
           onChange={handleChange}
           name="front_text"
+          value={front_text}
         />
         <input
           placeholder="Back text"
           onChange={handleChange}
           name="back_text"
+          value={back_text}
         />
         <input type="submit" />
       </form>
