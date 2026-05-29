@@ -1,4 +1,4 @@
-import { useParams } from "react-router-dom";
+import { useParams, Link } from "react-router-dom";
 import axios from "axios";
 import { useState, useEffect } from "react";
 
@@ -87,6 +87,7 @@ const Card = () => {
         />
         <input type="submit" />
       </form>
+      <button><Link to={`/deck/${deckId}/review`}>Start Review</Link></button>
     </>
   );
 };
