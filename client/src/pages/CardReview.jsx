@@ -46,7 +46,7 @@ const CardReview = () => {
         header: { Authorization: `Bearer ${token}` },
       },
     );
-    currentIndex++;
+    setCurrentIndex(currentIndex++);
     setFlip(false);
   };
 
