@@ -40,13 +40,13 @@ const CardReview = () => {
     const { value } = e.target;
     const token = localStorage.getItem("token");
     await axios.post(
-      `http://localhost:5000/api/cards/:${dueCards.card_id}/review`,
-      { value },
+      `http://localhost:5000/api/cards/${show.card_id}/review`,
+      { rating: value },
       {
-        header: { Authorization: `Bearer ${token}` },
+        headers: { Authorization: `Bearer ${token}` },
       },
     );
-    setCurrentIndex(currentIndex++);
+    setCurrentIndex(currentIndex + 1);
     setFlip(false);
   };
 

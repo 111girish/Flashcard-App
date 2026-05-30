@@ -71,15 +71,20 @@ export const cardReview = async (req, res) => {
   const userId = req.user.userId;
   const cardId = req.params.id;
 
-  const { rating } = req.body;
+  const rating = Number(req.body.rating);
 
-  if(!rating || rating < 0 || rating > 5) return res.status(400).json({message: "Rating must be between 0 and 5"})
+  if (
+    rating === undefined ||
+    rating === null ||
+    Number(rating) < 0 ||
+    Number(rating) > 5
+  )
+    return res.status(400).json({ message: "Rating must be between 0 and 5" });
 
   const client = await pool.connect();
   try {
     const text1 = "SELECT * FROM cards WHERE card_id = $1";
     const value1 = [cardId];
-
 
     const result1 = await client.query(text1, value1);
     const data1 = result1.rows[0];
@@ -87,13 +92,13 @@ export const cardReview = async (req, res) => {
 
     const final = sm2(rating, repetitions, ease_factor, interval);
 
-    
-
-    const { repetitions: newRepetitions, easyFactor, interval: newInterval } = final;
+    const {
+      repetitions: newRepetitions,
+      easyFactor,
+      interval: newInterval,
+    } = final;
     const newReviewdate = new Date();
-    newReviewdate.setDate(newReviewdate.getDate() + newInterval); 
-
-    
+    newReviewdate.setDate(newReviewdate.getDate() + newInterval);
 
     const text2 =
       "UPDATE cards SET repetitions = $1, interval = $2, next_review_date = $3, ease_factor = $4 WHERE card_id = $5 RETURNING * ;";
