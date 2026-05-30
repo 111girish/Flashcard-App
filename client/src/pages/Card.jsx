@@ -1,4 +1,4 @@
-import { useParams, Link } from "react-router-dom";
+import { useParams, Link, useNavigate } from "react-router-dom";
 import axios from "axios";
 import { useState, useEffect } from "react";
 
@@ -6,18 +6,20 @@ const Card = () => {
   const [cards, setCards] = useState([]);
   const { deckId } = useParams();
   const [text, setText] = useState({ front_text: "", back_text: "" });
-  const { front_text, back_text } = text;
-
+  const navigate = useNavigate();
 
   useEffect(() => {
     const cardGet = async () => {
-      const token = localStorage.getItem("token");
-      const result = await axios.get(
-        `http://localhost:5000/api/decks/${deckId}/cards`,
-        { headers: { Authorization: `Bearer ${token}` } },
-      );
-      const data = result.data.data;
-      setCards(data);
+      try {
+        const token = localStorage.getItem("token");
+        const result = await axios.get(
+          `http://localhost:5000/api/decks/${deckId}/cards`,
+          { headers: { Authorization: `Bearer ${token}` } }
+        );
+        setCards(result.data.data);
+      } catch (err) {
+        console.log(err);
+      }
     };
     cardGet();
   }, []);
@@ -35,11 +37,11 @@ const Card = () => {
       const result = await axios.post(
         `http://localhost:5000/api/decks/${deckId}/cards`,
         { front_text, back_text, deckId },
-        { headers: { Authorization: `Bearer ${token}` } },
+        { headers: { Authorization: `Bearer ${token}` } }
       );
       const data = result.data.data[0];
       setCards([...cards, data]);
-      setText({front_text: "", back_text: ""})
+      setText({ front_text: "", back_text: "" });
     };
     cardPost();
   };
@@ -47,48 +49,89 @@ const Card = () => {
   const handleDelete = async (cardId) => {
     const token = localStorage.getItem("token");
     await axios.delete(`http://localhost:5000/api/cards/${cardId}`, {
-      headers: { Authorization: `Bearer ${token}` }
-    });    
+      headers: { Authorization: `Bearer ${token}` },
+    });
     setCards(cards.filter((card) => card.card_id !== cardId));
   };
 
   return (
-    <>
-      <h1>This is a fucking Card</h1>
-      {!cards.length && <h3>There are no cards here!!</h3>}
-      {cards.length > 0 && (
-        <ul>
+    <div className="page-wrapper">
+      <Link className="back-link" to="/dashboard">
+        ← Back to Decks
+      </Link>
+
+      <div className="page-header">
+        <div>
+          <h1 className="page-title">Cards</h1>
+          <p className="page-subtitle">{cards.length} card{cards.length !== 1 ? "s" : ""} in this deck</p>
+        </div>
+        {cards.length > 0 && (
+          <button
+            className="start-review-btn"
+            onClick={() => navigate(`/deck/${deckId}/review`)}
+          >
+            Start Review →
+          </button>
+        )}
+      </div>
+
+      {cards.length === 0 ? (
+        <div className="empty-state" style={{ marginBottom: "2rem" }}>
+          <p>No cards yet. Add your first card below.</p>
+        </div>
+      ) : (
+        <div className="cards-grid">
           {cards.map((card) => (
-            <li key={card.card_id}>
-              {card.front_text} === {card.back_text}
+            <div className="card-item" key={card.card_id}>
               <button
-                onClick={() => {
-                  handleDelete(card.card_id);
-                }}
+                className="btn-danger card-item-delete"
+                onClick={() => handleDelete(card.card_id)}
               >
-                Delete
+                ✕
               </button>
-            </li>
+              <p className="card-item-front">{card.front_text}</p>
+              <div className="card-divider" />
+              <p className="card-item-back">{card.back_text}</p>
+              <p style={{
+                fontSize: "0.75rem",
+                color: "var(--border)",
+                marginTop: "0.75rem",
+                fontStyle: "italic"
+              }}>
+                Next review: {new Date(card.next_review_date).toLocaleDateString()}
+              </p>
+            </div>
           ))}
-        </ul>
+        </div>
       )}
-      <form onSubmit={handleSubmit}>
-        <input
-          placeholder="Front text"
-          onChange={handleChange}
-          name="front_text"
-          value={front_text}
-        />
-        <input
-          placeholder="Back text"
-          onChange={handleChange}
-          name="back_text"
-          value={back_text}
-        />
-        <input type="submit" />
-      </form>
-      <button><Link to={`/deck/${deckId}/review`}>Start Review</Link></button>
-    </>
+
+      <div className="add-card-form">
+        <h3>Add a Card</h3>
+        <form onSubmit={handleSubmit}>
+          <div className="form-row">
+            <input
+              className="form-input"
+              placeholder="Front — the question"
+              onChange={handleChange}
+              name="front_text"
+              value={text.front_text}
+              required
+            />
+            <input
+              className="form-input"
+              placeholder="Back — the answer"
+              onChange={handleChange}
+              name="back_text"
+              value={text.back_text}
+              required
+            />
+          </div>
+          <button className="btn-secondary" type="submit">
+            + Add Card
+          </button>
+        </form>
+      </div>
+    </div>
   );
 };
 
