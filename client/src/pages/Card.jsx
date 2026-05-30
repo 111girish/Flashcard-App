@@ -54,6 +54,7 @@ const Card = () => {
     setCards(cards.filter((card) => card.card_id !== cardId));
   };
 
+
   return (
     <div className="page-wrapper">
       <Link className="back-link" to="/dashboard">
