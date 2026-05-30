@@ -88,7 +88,9 @@ export const cardReview = async (req, res) => {
 
     const result1 = await client.query(text1, value1);
     const data1 = result1.rows[0];
-    const { ease_factor, interval, repetitions, next_review_date } = data1;
+    const ease_factor = Number(data1.ease_factor);
+    const interval = Number(data1.interval);
+    const repetitions = Number(data1.repetitions);
 
     const final = sm2(rating, repetitions, ease_factor, interval);
 

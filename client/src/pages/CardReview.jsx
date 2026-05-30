@@ -3,7 +3,6 @@ import { useParams } from "react-router-dom";
 import axios from "axios";
 
 const CardReview = () => {
-  const [cards, setCards] = useState([]);
   const { deckId } = useParams();
   const [dueCards, setDueCards] = useState([]);
   let [currentIndex, setCurrentIndex] = useState(0);
@@ -16,7 +15,6 @@ const CardReview = () => {
         { headers: { Authorization: `Bearer ${token}` } },
       );
       const data = result.data.data;
-      setCards(data);
       const current = new Date();
       const dateString = current.toISOString().split("T")[0];
       // for (let i = 0; i < cards.length; i++) {
