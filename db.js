@@ -4,7 +4,10 @@ import getEnv from './config.js';
 const params = getEnv('dbConnect');
 
 const pool = new Pool({
-  connectionString: params,
+  connectionString: getEnv('dbConnect'),
+  ssl: {
+    rejectUnauthorized: false
+  },
   max: 20, // set pool max size to 20
   idleTimeoutMillis: 1000, // close idle clients after 1 second
   connectionTimeoutMillis: 1000, // return an error after 1 second if connection could not be established
