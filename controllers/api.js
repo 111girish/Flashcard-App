@@ -52,7 +52,7 @@ export const login = async (req, res) => {
     const result = await client.query(text, values);
     const user = result.rows[0];
 
-    if (!user) return res.status(401).json({message: "I have no idea who the fuck that is..."});
+    if (!user) return res.status(401).json({message: "I have no idea who that is..."});
 
     const dataUser = user.username;
     const dataEmail = user.email;
@@ -62,7 +62,7 @@ export const login = async (req, res) => {
     const compare = await bcrypt.compare(password, dataPassword);
 
     if (!(dataUser === username && compare && dataEmail === email)) {
-      res.status(401).json({ message: "Yo! Who the fuck is you?" });
+      res.status(401).json({ message: "Yo! Who is you?" });
       return;
     } 
 

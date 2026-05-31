@@ -101,7 +101,7 @@ const Dashboard = () => {
                   </Link>
                 </td>
                 <td style={{ color: "var(--ink-light)", fontStyle: "italic" }}>
-                  —
+                  {deck.card_count}
                 </td>
                 <td style={{ textAlign: "right" }}>
                   <button
