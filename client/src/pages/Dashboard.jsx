@@ -11,7 +11,7 @@ const Dashboard = () => {
     const fetchDecks = async () => {
       try {
         const token = localStorage.getItem("token");
-        const result = await axios.get(`${import.meta.env.VITE_API_URL}api/decks/`, {
+        const result = await axios.get(`${import.meta.env.VITE_API_URL}/api/decks/`, {
           headers: { Authorization: `Bearer ${token}` },
         });
         setDecks(result.data.decks);
