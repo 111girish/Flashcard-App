@@ -11,9 +11,12 @@ const Dashboard = () => {
     const fetchDecks = async () => {
       try {
         const token = localStorage.getItem("token");
-        const result = await axios.get(`${import.meta.env.VITE_API_URL}/api/decks/`, {
-          headers: { Authorization: `Bearer ${token}` },
-        });
+        const result = await axios.get(
+          `${import.meta.env.VITE_API_URL}/api/decks/`,
+          {
+            headers: { Authorization: `Bearer ${token}` },
+          },
+        );
         setDecks(result.data.decks);
       } catch (err) {
         console.log(err);
@@ -27,13 +30,18 @@ const Dashboard = () => {
     if (!subject.trim()) return;
     const createDeck = async () => {
       const token = localStorage.getItem("token");
-      const result = await axios.post(
+      await axios.post(
         `${import.meta.env.VITE_API_URL}/api/decks`,
         { subject },
-        { headers: { Authorization: `Bearer ${token}` } }
+        { headers: { Authorization: `Bearer ${token}` } },
       );
-      const data = result.data.deck;
-      setDecks([...decks, data]);
+      const result = await axios.get(
+        `${import.meta.env.VITE_API_URL}/api/decks/`,
+        {
+          headers: { Authorization: `Bearer ${token}` },
+        },
+      );
+      setDecks(result.data.decks);
       setSubject("");
     };
     createDeck();
@@ -72,8 +80,14 @@ const Dashboard = () => {
             borderRadius: "2px",
             transition: "all 0.2s",
           }}
-          onMouseEnter={e => { e.target.style.background = "var(--ink)"; e.target.style.color = "var(--bg)"; }}
-          onMouseLeave={e => { e.target.style.background = "transparent"; e.target.style.color = "var(--ink-light)"; }}
+          onMouseEnter={(e) => {
+            e.target.style.background = "var(--ink)";
+            e.target.style.color = "var(--bg)";
+          }}
+          onMouseLeave={(e) => {
+            e.target.style.background = "transparent";
+            e.target.style.color = "var(--ink-light)";
+          }}
         >
           Sign out
         </button>
