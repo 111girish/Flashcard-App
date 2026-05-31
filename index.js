@@ -12,7 +12,7 @@ const app = express();
 const PORT = getEnv('port');
 
 app.use(cors({
-  origin: 'http://localhost:5173',
+  origin: 'https://flashcard-app-2qsp.onrender.com',
   credentials: true
 }));
 
