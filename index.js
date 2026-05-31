@@ -12,7 +12,7 @@ const app = express();
 const PORT = getEnv('port');
 
 app.use(cors({
-  origin: 'https://flashcard-app-2qsp.onrender.com',
+  origin: 'https://flashcard-app-delta-three.vercel.app/',
   credentials: true
 }));
 
