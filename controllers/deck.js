@@ -16,7 +16,6 @@ export const deckCreate = async (req, res) => {
     const data = result.rows[0];
     res.status(200).json({ message: "The deck is created", decks: data });
   } catch (error) {
-    console.error(error);
     res.status(500).json({ message: "There seems to be a error!!" });
   } finally {
     client.release();

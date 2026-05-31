@@ -19,7 +19,6 @@ export const cardCreate = async (req, res) => {
     const data = result.rows;
     res.status(200).json({ message: "The card is created", data });
   } catch (error) {
-    console.error(error);
     res.status(500).json({ message: "There seems to be a error!!" });
   } finally {
     client.release();
@@ -39,7 +38,6 @@ export const cardGet = async (req, res) => {
     const data = result.rows;
     res.status(200).json({ message: "Cards in the deck is recieved", data });
   } catch (err) {
-    console.log(err);
     res.status(500).json({ message: "There seems to be a error!!" });
   } finally {
     client.release();
@@ -60,7 +58,6 @@ export const cardDelete = async (req, res) => {
     const data = result.rows;
     res.status(200).json({ message: "Cards in the deck is deleted", data });
   } catch (err) {
-    console.log(err);
     res.status(500).json({ message: "There seems to be a error!!" });
   } finally {
     client.release();
@@ -116,7 +113,6 @@ export const cardReview = async (req, res) => {
     const data2 = result2.rows[0];
     res.status(200).json({ message: "The table is updated!", data2 });
   } catch (err) {
-    console.log(err);
     res.status(404).json({ message: "There is no card of that id" });
   } finally {
     client.release();
