@@ -12,7 +12,7 @@ const app = express();
 const PORT = getEnv('port');
 
 app.use(cors({
-  origin: 'https://flashcard-app-delta-three.vercel.app/',
+  origin: 'https://flashcard-app-delta-three.vercel.app',
   credentials: true
 }));
 
