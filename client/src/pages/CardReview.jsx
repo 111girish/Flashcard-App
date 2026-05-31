@@ -24,7 +24,7 @@ const CardReview = () => {
       try {
         const token = localStorage.getItem("token");
         const result = await axios.get(
-          `http://localhost:5000/api/decks/${deckId}/cards`,
+          `${import.meta.env.VITE_API_URL}/api/decks/${deckId}/cards`,
           { headers: { Authorization: `Bearer ${token}` } }
         );
         const data = result.data.data;
@@ -48,7 +48,7 @@ const CardReview = () => {
     const token = localStorage.getItem("token");
     try {
       await axios.post(
-        `http://localhost:5000/api/cards/${show.card_id}/review`,
+        `${import.meta.env.VITE_API_URL}api/cards/${show.card_id}/review`,
         { rating: value },
         { headers: { Authorization: `Bearer ${token}` } }
       );

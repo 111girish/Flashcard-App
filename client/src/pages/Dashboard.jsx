@@ -28,7 +28,7 @@ const Dashboard = () => {
     const createDeck = async () => {
       const token = localStorage.getItem("token");
       const result = await axios.post(
-        "http://localhost:5000/api/decks",
+        `${import.meta.env.VITE_API_URL}/api/decks`,
         { subject },
         { headers: { Authorization: `Bearer ${token}` } }
       );
