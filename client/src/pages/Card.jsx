@@ -13,7 +13,7 @@ const Card = () => {
       try {
         const token = localStorage.getItem("token");
         const result = await axios.get(
-          `http://localhost:5000/api/decks/${deckId}/cards`,
+          `${import.meta.env.VITE_API_URL}/api/decks/${deckId}/cards`,
           { headers: { Authorization: `Bearer ${token}` } }
         );
         setCards(result.data.data);
@@ -35,7 +35,7 @@ const Card = () => {
       const { front_text, back_text } = text;
       const token = localStorage.getItem("token");
       const result = await axios.post(
-        `http://localhost:5000/api/decks/${deckId}/cards`,
+        `${import.meta.env.VITE_API_URL}/api/decks/${deckId}/cards`,
         { front_text, back_text, deckId },
         { headers: { Authorization: `Bearer ${token}` } }
       );
@@ -48,7 +48,7 @@ const Card = () => {
 
   const handleDelete = async (cardId) => {
     const token = localStorage.getItem("token");
-    await axios.delete(`http://localhost:5000/api/cards/${cardId}`, {
+    await axios.delete(`${import.meta.env.VITE_API_URL}/api/cards/${cardId}`, {
       headers: { Authorization: `Bearer ${token}` },
     });
     setCards(cards.filter((card) => card.card_id !== cardId));

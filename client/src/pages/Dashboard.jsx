@@ -11,7 +11,7 @@ const Dashboard = () => {
     const fetchDecks = async () => {
       try {
         const token = localStorage.getItem("token");
-        const result = await axios.get("http://localhost:5000/api/decks/", {
+        const result = await axios.get(`${import.meta.env.VITE_API_URL}api/decks/`, {
           headers: { Authorization: `Bearer ${token}` },
         });
         setDecks(result.data.decks);
@@ -41,7 +41,7 @@ const Dashboard = () => {
 
   const handleDelete = async (deckId) => {
     const token = localStorage.getItem("token");
-    await axios.delete(`http://localhost:5000/api/decks/${deckId}`, {
+    await axios.delete(`${import.meta.env.VITE_API_URL}/api/decks/${deckId}`, {
       headers: { Authorization: `Bearer ${token}` },
     });
     setDecks(decks.filter((deck) => deck.deck_id !== deckId));
